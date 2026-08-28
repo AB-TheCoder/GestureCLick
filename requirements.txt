@@ -1,0 +1,3 @@
+# standered requirements for the project
+
+# primary
