@@ -9,3 +9,12 @@ report:--
 31/8/2026
 aim:get started with gesture_landmark and understand the logic
 report:time extened by did do some research and even got started with gesture gesture_landmark
+1/9/2026
+aim:complete gesture_landmark
+report: established some basic guidelines and have got clarity behind all . i feel i am procastinating a bit though.
+thoughts:ok so i will have 5 components for the enitre logic behind the program.
+1. Camera-feed - this file will feed the image data to the ai.
+2. gesture-landmark - this file will interact with the data and recognise the positions of differnet landmark(hands,writs,arm etc)
+3. gesture-recog - this file will interect with the positions of the landmarks and identifiy possible gestures
+4. executer - this fill will use the identified gestures and then match it with the required actions and execute it
+5. main - this final file will bring everything about and actually make logic out of the blueprint
