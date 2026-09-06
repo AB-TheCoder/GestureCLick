@@ -1,54 +1,52 @@
-#this is the third component of the project 
-#it will use the differnt landmarks to recognise gestures and then it execute the corresponding action 
-#author:@AaravBhatt 
+# this is the main working file containing the source code for observing gestures and expression from the data produced.
+# it contains the system responsible for the recogniton of different landmarks
 
-#-----------------------------------------------------------------------------------------------
-#imports
-#primary--------------------------
+#------------------------------------------------------------------------------------------------------------------------
+# imports 
+try:
+    import mediapipe as ann
+except ImportError as IR:
+    print(IR)
+
+try:
+    import numpy as np
+except ImportError as IR:
+    print(IR)
 try:
     import cv2 as cv
-    import numpy as np
-    import mediapipe as Ann 
+except ImportError as IR:
+    print(IR)
+# secondary
+from pathlib import Path
+from typing import Optional
+from os import path
+from ast import Try
+from nt import error
+from pdb import run
 
 
-except Exception as e:
-    raise RuntimeError(f'the following error occurred while importing the modules:{e}')
-
-#-----------------------------------------------------------------------------------------------
-#secondary--------------------------
-try:
-    import os 
-    import sys 
-    import math 
-    from pathlib import Path
-    from typing import Optional
-    from ast import Try # ??? 
-    from nt import error    
-except Exception as e:
-    raise RuntimeError(f'the following error occurred while importing the secondary modules:{e}')
-
-
-#---------------------main-------------------------------------------------
-class Gesture_recog():
-    def __init__(self):
-        """this is the constructor class and it will initialise the Ann model and other necessary variables""" 
-        try:
-            pass
-        except Exception as e:
-            raise RuntimeError(f'the following error occurred while initialising the Gesture_recog class:{e}')
-    
-    def analyise_landmarks(self) -> dict:
-        """ this method will analyse the landmarks and return the gesture type
-        it will return a dictionary with the gesture type and the confidence score"""
-        try:
-            pass
-        except Exception as e:
-            raise RuntimeError(f'the following error occurred while analysing the landmarks:{e}')
-    
-    def terminate(self) -> None:
-        """ this method will terminate the program""" 
+#-----------------------------------------------------------------
+class NeuralN():
+    def __init__(self) -> None:# inialise the Ai
         pass
 
+    @staticmethod
+    def bgr_rgb(frame:np.ndarray) -> np.ndarray:
+        """this static method converts the bgr format mat data to the required rgb format Numpy Array"""
+        try:
+            framePR=cv.cvtColor(frame,cv.COLOR_BGR2RGB)
+            return framePR
+        except Exception as e:
+            raise RuntimeError(f'the bgr format could not be converted to RGB beacuse:{e}')
+    def analyise_image(self)->list:
+        try:
+            pass
+        except Exception as e:
+            raise RuntimeError(f'the image could not be analyised because ::{e}')
+    
+    def terminate(self)->None:
+        pass
 
-if __name__=="__main__":
-    pass 
+if __name__ == '__main__':
+    frame = cv.imread(r'gesture_click\data\temporary\2026-08-31_22-22-56-frame.png')
+    print(NeuralN.bgr_rgb(frame))

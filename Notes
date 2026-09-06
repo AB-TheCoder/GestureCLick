@@ -18,3 +18,18 @@ thoughts:ok so i will have 5 components for the enitre logic behind the program.
 3. gesture-recog - this file will interect with the positions of the landmarks and identifiy possible gestures
 4. executer - this fill will use the identified gestures and then match it with the required actions and execute it
 5. main - this final file will bring everything about and actually make logic out of the blueprint
+
+
+3/9/2026
+AIM: complete Gesture Landmark
+report: completed basic configuration of the model and got shit really cleared. i know i am been telling this everyday but you i just got to understand it
+notes: the  current version i am using for media_pipe is 1.0.1 ,it is new and not a lot of information is available for it . i may switch
+5/9/2026
+AIM:complete Gesture Landmark
+report:almost completed,finishing touch left to give
+notes:
+
+6/9/2026
+AIM:furnish gesture landmark and begin with 3 component
+report:
+notes

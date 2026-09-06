@@ -68,9 +68,7 @@ class Camera_Feed():
                 
         except Exception as e:
             raise RuntimeError(f'the data could not be updates because: {e}')
-    @staticmethod
-    def run():
-        pass
+
 
 
 if __name__ == '__main__':
