@@ -1,18 +1,12 @@
-#this is the third component of the project 
-#it will use the differnt landmarks to recognise gestures and then it execute the corresponding action 
+#this is the 2 component of the project 
+#this file will use mediapipe to generate the coordinats of different landmarks which are to be used as input for other files
 #author:@AaravBhatt 
 
 #-----------------------------------------------------------------------------------------------
 #imports
-#primary--------------------------
+#primary------------------------------
 
 
-
-from ctypes import ArgumentError
-from cv2.gapi.wip import draw
-from mediapipe.tasks.python import vision
-from mediapipe.tasks.python.vision import drawing_utils, hand_landmarker
-from mediapipe.tasks.python.vision.drawing_styles import _HAND_CONNECTION_STYLE
 
 
 try:
@@ -25,8 +19,9 @@ except Exception as e:
     raise ImportError(f'Numpy could not be successfully imported becuase :{e}')
 try:
     import mediapipe as mp
-    from mediapipe.tasks import python
+    from mediapipe.tasks.python import vision
     from mediapipe.tasks.python.vision import HandLandmarkerResult
+    from mediapipe.tasks.python.vision import drawing_utils
 
 except Exception as e:
     raise RuntimeError(f'the following error occurred while importing the MediaPipe Hands:{e}')
@@ -34,48 +29,46 @@ except Exception as e:
 #-----------------------------------------------------------------------------------------------
 #secondary--------------------------
 try:
-    import os 
-    import sys 
-    import math 
+
+
     from pathlib import Path
-    from typing import Optional
-    from ast import Try # ??? 
-    from nt import error    
+
+ 
 except Exception as e:
     raise RuntimeError(f'the following error occurred while importing the secondary modules:{e}')
 
 
 #---------------------main-------------------------------------------------
-class ANN():
+class Handtriangulator():
     Base_Options = mp.tasks.BaseOptions
     Hand_Landmarker = mp.tasks.vision.HandLandmarker
     Hand_LandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
     Running_Mode = mp.tasks.vision.RunningMode
     def __init__(self,model_path:str,max_hands:int=2,min_confidence:float=0.6,Running_mode = mp.tasks.vision.RunningMode.VIDEO):
-        """this is the constructor class and it will initialise the Ann model and other necessary variables""" 
+        """this is the constructor class and it will initialise theHandtriangulator model and other necessary variables""" 
         try:
             
             try:
-                self.base_options = ANN.Base_Options(
+                self.base_options =Handtriangulator.Base_Options(
                     model_asset_path = model_path,
                 )
             except Exception as e:
-                raise error(f'unable to create BaseOptions :{e}')
+                raise SystemError(f'unable to create BaseOptions :{e}')
             try:
-                self.Options = ANN.Hand_LandmarkerOptions(
+                self.Options =Handtriangulator.Hand_LandmarkerOptions(
                     num_hands = max_hands,
                     running_mode = Running_mode,
                     base_options = self.base_options,
                     min_tracking_confidence = min_confidence
                 )
             except Exception as e:
-                raise error(f'unable to create HandLandmarker Options:{e}')
+                raise SystemError(f'unable to create HandLandmarker Options:{e}')
             try:
-                self.model = ANN.Hand_Landmarker.create_from_options(
+                self.model =Handtriangulator.Hand_Landmarker.create_from_options(
                     self.Options
                 )
             except Exception as e:
-               raise error(f'unable to create handlandmarker model :{e}')
+               raise SystemError(f'unable to create handlandmarker model :{e}')
 
         except Exception as e:
             raise RuntimeError(f'the following error occurred while initialising the Gesture_recog class:{e}')
@@ -86,7 +79,7 @@ class ANN():
         1.convert standered BGR format to rgb format for internal processing
         2. aquire a image object needed for again internal processing
         3. analyse the landmarks and return the generation
-        it will return a ndarray with the gesture type and the confidence score"""
+        it will return a handlandmarkerResult datatype with the landmarks and handness"""
         try:
             try:
                 if type(frame)==np.ndarray:
@@ -144,14 +137,14 @@ class ANN():
                         if cv.waitKey(1) & 0xFF == 27 or cv.waitKey(1) & 0xFF == ord('q'):
                             break
                 except Exception as e:
-                    raise error(f'The modified frame could not be displayed:{e}')
+                    raise SystemError(f'The modified frame could not be displayed:{e}')
 
         except Exception as e :
             raise RuntimeError(f'the system could not provide a visual view :{e}')
     def terminate(self) -> None:
         """ this method will terminate the program""" 
         try:
-            self.model.close()
+            self.model.close()  
             print('model Terminated')
             return None
         except Exception as e:
@@ -159,8 +152,8 @@ class ANN():
 
 
 if __name__=="__main__":
-    ANM =ANN(model_path=r'gesture_click\data\hand_landmarker.task')
-    ANM.analyise_landmarks(frame=r'gesture_click\data\demo1.jpg',timestamp=1)
+    ANM = Handtriangulator(model_path=r'gesture_click\data\hand_landmarker.task')
+    ANM.analyise_landmarks(frame=r'gesture_click\data\images\fingerSymbols\IMG_20220430_181755.jpg',timestamp=1)
     print(ANM.generation)
     ANM.visuals(frame=ANM.img_path,generation=ANM.generation)
     ANM.terminate()
