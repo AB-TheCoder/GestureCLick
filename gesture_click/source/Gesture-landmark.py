@@ -32,7 +32,7 @@ try:
 
 
     from pathlib import Path
-
+    from typing import Optional
  
 except Exception as e:
     raise RuntimeError(f'the following error occurred while importing the secondary modules:{e}')
@@ -44,7 +44,7 @@ class Handtriangulator():
     Hand_Landmarker = mp.tasks.vision.HandLandmarker
     Hand_LandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
     Running_Mode = mp.tasks.vision.RunningMode
-    def __init__(self,model_path:str,max_hands:int=2,min_confidence:float=0.6,Running_mode = mp.tasks.vision.RunningMode.VIDEO):
+    def __init__(self,model_path:str,max_hands:int=2,min_confidence:float=0.6,Running_mode = mp.tasks.vision.RunningMode.VIDEO,img_path:Optional[str]=None):
         """this is the constructor class and it will initialise theHandtriangulator model and other necessary variables""" 
         try:
             
@@ -131,13 +131,8 @@ class Handtriangulator():
                         hand_landmarks,
                         vision.HandLandmarksConnections.HAND_CONNECTIONS
                         )
-                try:
-                    while True:
-                        cv.imshow('Camera',frame)
-                        if cv.waitKey(1) & 0xFF == 27 or cv.waitKey(1) & 0xFF == ord('q'):
-                            break
-                except Exception as e:
-                    raise SystemError(f'The modified frame could not be displayed:{e}')
+                self.annotted  = frame
+                return frame
 
         except Exception as e :
             raise RuntimeError(f'the system could not provide a visual view :{e}')
@@ -153,7 +148,29 @@ class Handtriangulator():
 
 if __name__=="__main__":
     ANM = Handtriangulator(model_path=r'gesture_click\data\hand_landmarker.task')
-    ANM.analyise_landmarks(frame=r'gesture_click\data\images\fingerSymbols\IMG_20220430_181755.jpg',timestamp=1)
+    # import os
+    # folder= r'C:\Users\Aarav\Desktop\GestureCLick\gesture_click\data\images\fingerSymbols'
+
+    # for i, file in enumerate(os.listdir(folder)):
+    #     print(file)
+        
+    #     path_file = Path(folder) / f"{file}"
+        
+        
+    ANM.analyise_landmarks(frame = r"gesture_click\data\images\fingerSymbols\testimage-2.jpg",timestamp=1)
     print(ANM.generation)
-    ANM.visuals(frame=ANM.img_path,generation=ANM.generation)
-    ANM.terminate()
+    print(f"--------\n{ANM.generation.hand_landmarks.NormalizedLandmark[1]}")
+        # ANM.visuals(frame=ANM.img_path,generation=ANM.generation)
+
+
+
+        # cv.imshow('Camera', ANM.annotted)
+        # if cv.waitKey(1) & 0xFF == ord('q'):
+        #     cv.destroyAllWindows()
+        #     break
+        # cv.waitKey(1000)
+
+
+
+
+        
