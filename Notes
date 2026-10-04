@@ -57,3 +57,35 @@ report:carried out basics
 12/9/2026 
 Aim:little of normalisation
 notes:
+-----------finaly restarrting my work after a small break due to exam ---------------------------------
+dates extended so i guess i am lucky .
+but locked in from now
+
+
+-------------------------------------------------------------------------------------------------------------
+30/9/2026
+Aim: get shit together
+report:understood handmarkerresult framework
+notes:
+so for the processing i need to first due two normalization techniques . 
+2/10/2026 
+Aim: start with normalisation 
+report:understood handmarkerResult
+notes:
+    HandLandmarkerResult
+├── handedness              List[List[Category]]
+├── hand_landmarks          List[List[NormalizedLandmark]]   # image-normalized
+└── hand_world_landmarks    List[List[Landmark]]             # meters, world space
+# wrong
+ANM.generation.hand_landmarks.NormalizedLandmark[1]
+
+# right
+ANM.generation.hand_landmarks[0][1]          # landmark 1 of first hand
+ANM.generation.hand_landmarks[0][1].x        # its x
+ANM.generation.handedness[0][0].category_name  # "Left" / "Right"
+ANM.generation.hand_world_landmarks[0][0]    # wrist in world space
+
+3/10/2026
+Aim:finish Translation 
+report:finished basic converstion
+Notes:

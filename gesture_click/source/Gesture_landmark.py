@@ -147,29 +147,9 @@ class Handtriangulator():
 
 
 if __name__=="__main__":
-    ANM = Handtriangulator(model_path=r'gesture_click\data\hand_landmarker.task')
-    # import os
-    # folder= r'C:\Users\Aarav\Desktop\GestureCLick\gesture_click\data\images\fingerSymbols'
-
-    # for i, file in enumerate(os.listdir(folder)):
-    #     print(file)
-        
-    #     path_file = Path(folder) / f"{file}"
-        
-        
-    ANM.analyise_landmarks(frame = r"gesture_click\data\images\fingerSymbols\testimage-2.jpg",timestamp=1)
+    ANM = Handtriangulator(model_path=r'gesture_click\data\hand_landmarker.task')        
+    ANM.analyise_landmarks(frame = r"C:\Users\Aarav\Desktop\GestureCLick\gesture_click\data\images\two_hands\test-image2.jpg",timestamp=1)
     print(ANM.generation)
-    print(f"--------\n{ANM.generation.hand_landmarks.NormalizedLandmark[1]}")
-        # ANM.visuals(frame=ANM.img_path,generation=ANM.generation)
-
-
-
-        # cv.imshow('Camera', ANM.annotted)
-        # if cv.waitKey(1) & 0xFF == ord('q'):
-        #     cv.destroyAllWindows()
-        #     break
-        # cv.waitKey(1000)
-
 
 
 
