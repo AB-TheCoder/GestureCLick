@@ -1,3 +1,7 @@
 # standered requirements for the project
+# rebuild env: uv venv --python 3.11 .venv  then  uv pip install -r requirements.txt
 
 # primary
+mediapipe==1.1.0
+numpy==2.4.6
+opencv-python==5.0.0.93

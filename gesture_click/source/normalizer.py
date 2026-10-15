@@ -7,7 +7,7 @@ try:
     import mediapipe as mp
     from mediapipe.tasks.python import vision
     from mediapipe.tasks.python.vision import HandLandmarkerResult
-    from Gesture_landmark import Handtriangulator
+    from Gesture_landmark import Handtriangulator, DATA_DIR, MODEL_PATH
 
 except ImportError as IR:
     print(IR)
@@ -84,6 +84,6 @@ class Normalizer():
 if __name__ == '__main__':
     
     Model = Normalizer()
-    ANM = Handtriangulator(model_path=r'gesture_click\data\hand_landmarker.task')        
-    ANM.analyise_landmarks(frame = r"C:\Users\Aarav\Desktop\GestureCLick\gesture_click\data\images\two_hands\test-image2.jpg",timestamp=1)
+    ANM = Handtriangulator(model_path=str(MODEL_PATH))
+    ANM.analyise_landmarks(frame = str(DATA_DIR / "images" / "two_hands" / "test-image2.jpg"),timestamp=1)
     print(Model.translation_invariance(ANM.generation))

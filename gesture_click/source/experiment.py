@@ -40,6 +40,8 @@ try:
 except Exception as e:
     raise RuntimeError(f'the following error occurred while importing the secondary modules:{e}')
 
+#paths are built from this file's location so they work from any working directory
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 #---------------------main-------------------------------------------------
 class ANN():
@@ -94,6 +96,6 @@ class ANN():
 
 
 if __name__=="__main__":
-    ANM =ANN(model_path=r'gesture_click\data\hand_landmarker.task')
+    ANM =ANN(model_path=str(DATA_DIR / "hand_landmarker.task"))
 
     

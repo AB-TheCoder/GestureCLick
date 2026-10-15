@@ -37,6 +37,10 @@ try:
 except Exception as e:
     raise RuntimeError(f'the following error occurred while importing the secondary modules:{e}')
 
+#paths are built from this file's location so they work from any working directory
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+MODEL_PATH = DATA_DIR / "hand_landmarker.task"
+
 
 #---------------------main-------------------------------------------------
 class Handtriangulator():
@@ -147,8 +151,8 @@ class Handtriangulator():
 
 
 if __name__=="__main__":
-    ANM = Handtriangulator(model_path=r'gesture_click\data\hand_landmarker.task')        
-    ANM.analyise_landmarks(frame = r"C:\Users\Aarav\Desktop\GestureCLick\gesture_click\data\images\two_hands\test-image2.jpg",timestamp=1)
+    ANM = Handtriangulator(model_path=str(MODEL_PATH))
+    ANM.analyise_landmarks(frame = str(DATA_DIR / "images" / "two_hands" / "test-image2.jpg"),timestamp=1)
     print(ANM.generation)
 
 

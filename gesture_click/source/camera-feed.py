@@ -23,6 +23,8 @@ from cv2.gapi import parseSSD
 from os import path
 from datetime import datetime as dt
 
+#paths are built from this file's location so they work from any working directory
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 #----------------------------------------------------------------
 class Camera_Feed():
@@ -79,5 +81,7 @@ if __name__ == '__main__':
     #         model.terminate()
     #         break
     model.Get_frame()
-    model.register(model.frame,r"gesture_click\data\temporary")
+    save_dir = DATA_DIR / "temporary"
+    save_dir.mkdir(exist_ok=True)
+    model.register(model.frame,str(save_dir))
     model.terminate()
