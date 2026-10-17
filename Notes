@@ -89,3 +89,10 @@ ANM.generation.hand_world_landmarks[0][0]    # wrist in world space
 Aim:finish Translation 
 report:finished basic converstion
 Notes:
+16/10/2026
+Aim:finish scale_invarience
+report:
+    finished ,but i need to learn more. understand more for it is the only thing that really matters
+
+notes:
+    use claude to understand stuff and to automate labour intensive reucrring task.
