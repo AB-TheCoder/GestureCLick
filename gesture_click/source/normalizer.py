@@ -1,8 +1,9 @@
-# this is the main working file containing the source code for observing gestures and expression from the data produced.
-# it contains the system responsible for the recogniton of different landmarks
+# this is the main working file containing the source code Normalising
+#  the landmark coordinate before recognition of gestures
 
 #------------------------------------------------------------------------------------------------------------------------
 # imports 
+
 try:
     from mediapipe.tasks.python.vision import HandLandmarkerResult
     from Gesture_landmark import Handtriangulator, DATA_DIR, MODEL_PATH
@@ -48,26 +49,32 @@ PINKY_TIP = 20
 
 #-----------------------------------------------------------------
 class Normalizer():
-    def __init__(self) -> None:# inialise the Ai
+    def __init__(self) -> None:#
         try:
             pass
         except Exception as e:
             raise RuntimeError(f'The system could not intiate the model :{e}')
 
 
-    def translation_invariance(self,data_result:HandLandmarkerResult,anchor:int=0)->list[np.ndarray]:#the defualt reference anchor is wrist pos
+    def translation_invariance(self,data_result:HandLandmarkerResult,anchor:int=WRIST)->list[np.ndarray]:#the defualt reference anchor is wrist pos
         """This method normalizes the landmark coordinates ,making them relative to a anchor landmark"""
         try:
-
-            if data_result is None:
+            
+            if not 0<= anchor <= PINKY_TIP:
+                raise ValueError(f"anchor must be 0-20,got{anchor}")
+            if data_result is None :
                 raise ValueError(
                     "The system could not fetch the landmarks data"
                 )
+
 
             data_set = []
 
             for hand in data_result.hand_landmarks:
 
+
+                if len(hand) != 21:
+                    raise ValueError(f"expected 21 landmarks, got {len(hand)}")
                 reference = hand[anchor]
 
                 normalized_hand = []
@@ -75,16 +82,17 @@ class Normalizer():
                 for landmark in hand:
 
                     x = landmark.x - reference.x
-                    y = landmark.y - reference.y
+                    y = landmark.y - reference.y # making the coordinate independent of the image
                     z = landmark.z - reference.z
 
                     normalized_hand.append([x, y, z])
 
                 normalized_hand = np.array(
-                    normalized_hand,
+                    normalized_hand, # changing the way the data is going to be stored
                     dtype=float
                 )
-
+                if not np.all(np.isfinite(normalized_hand)):
+                    raise ValueError("Hand Contains NaN or inf")
                 data_set.append(normalized_hand)
 
  
@@ -95,36 +103,74 @@ class Normalizer():
             raise RuntimeError(
                 f"System could not normalize the data: {e}" 
             ) from e 
-    def scale_invariance(self,data:list[np.ndarray]) -> list:
+    def scale_invariance(self,data:list[np.ndarray]) -> list[np.ndarray]:
+        """ In this Stage , i scale down the data to a uniform value so that all hand (bigger or smaller) give the same value"""
         try:
-            if data is None:
+            
+            if data is None :
                 raise ValueError(
                     "The system could not fetch the landmarks data"
                 )
-            else:
-                scaled_data = []
-                for hand in data:
-                    S = np.linalg.norm(hand[MIDDLE_MCP] - hand[WRIST])
-                    if S < 1e-6:
-                        raise ValueError("S is about zero::BAD Detection")
-                    new_hand = hand/S
-                    scaled_data.append(new_hand)
-                
 
-                return scaled_data
+            scaled_data = []
+            for hand in data:
+                if not np.all(np.isfinite(hand)):
+                    raise ValueError("hand contains NaN or inf")
+
+                S = np.linalg.norm(hand[MIDDLE_MCP] - hand[WRIST])
+                if S < 1e-6:
+                    raise ValueError("S is about zero::BAD Detection")
+                new_hand = hand/S
+                scaled_data.append(new_hand)
+            
+
+            return scaled_data
             
         except Exception as e:
             raise RuntimeError(
                 f"System could not normalise the data: {e}"
             )from e 
+
+    def rotational_invariance(self,data:list[np.ndarray]) ->  list[np.ndarray]:
+        """ THis is the final stage of normalisation where i normalise the hand with respect to the degree to which it is tiled
+        meaning that i am making it independent from tilt."""
+        try:
+                        
+            if data is None :
+                raise ValueError(
+                    "The system could not fetch the landmarks data"
+                )
+
+            rotational_normalised_set=[]
+            for hand in data:
+                if not np.all(np.isfinite(hand)):
+                    raise ValueError("hand contains NaN or inf")
+
+                x9, y9 = hand[MIDDLE_MCP, 0] - hand[WRIST,0], hand[MIDDLE_MCP, 1] - hand[WRIST,1] # getting the refernce pos-middleMCP
+                theta = np.arctan2(y9, x9) # retriving the angle by Tan inverse function 
+                cos = np.cos(theta)
+                sin= np.sin(theta) # doing the math,(dont ask how it works ;-)
+                R = np.array([[cos,sin,0],
+                [-sin,cos,0],
+                [0,0,1]
+                ])
+                rotated_hand = hand@ R.T # Matrix Multiplication.rotates every coordinate with a angle
+                rotational_normalised_set.append(rotated_hand)
+
+            return rotational_normalised_set
+        except Exception as e:
+            raise RuntimeError(
+                f"Rotational Invarience failed because of {e} " 
+            )from e
+
     def terminate(self)->None:
         pass
 
 if __name__ == '__main__':
-    
+    np.set_printoptions(suppress=True, precision=4) # to round up the output to 4 digits(normal outputs range on )
     Model = Normalizer()
     ANM = Handtriangulator(model_path=str(MODEL_PATH))
     ANM.analyise_landmarks(frame = str(DATA_DIR / "images" / "two_hands" / "test-image2.jpg"),timestamp=1)
     translated = Model.translation_invariance(ANM.generation)
     print("----------------------------------------------")
-    print(Model.scale_invariance(translated))
+    print(Model.rotational_invariance(Model.scale_invariance(translated)))

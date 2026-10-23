@@ -96,3 +96,13 @@ report:
 
 notes:
     use claude to understand stuff and to automate labour intensive reucrring task.
+
+23/10/2026
+Aim: finish scale _normalisation .
+Report:done, got claity starting basic steps for the next stage
+note:
+ the shit is tuff . 
+Rotation is in-plane only: palm away from the camera or side-on isn't handled.
+x and y use different units on non-square images. (This gets fixed in Stage 1, where the frame size is known.)
+θ is discarded, so direction-based gestures (swipes) will need it kept.
+Left and right hands stay mirror images; use handedness later.
