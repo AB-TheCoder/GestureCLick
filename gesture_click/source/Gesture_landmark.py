@@ -119,7 +119,7 @@ class Handtriangulator():
             return self.generation
         except Exception as e:
             raise RuntimeError(f'the system could not anaylise for landmarks:{e}')
-    def visuals(self,frame:np.ndarray|str|Path,generation:HandLandmarkerResult)->None:
+    def visuals(self,frame:np.ndarray|str|Path,generation:HandLandmarkerResult)->np.ndarray:
         """this method will be used to visuallize the landmark coordinates. #usefull when testing@temporary method"""
         try:
             if isinstance(frame, (str, Path)):
@@ -136,7 +136,7 @@ class Handtriangulator():
                         vision.HandLandmarksConnections.HAND_CONNECTIONS
                         )
                 self.annotted  = frame
-                return frame
+            return frame
 
         except Exception as e :
             raise RuntimeError(f'the system could not provide a visual view :{e}')

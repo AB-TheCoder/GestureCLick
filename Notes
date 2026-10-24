@@ -106,3 +106,9 @@ Rotation is in-plane only: palm away from the camera or side-on isn't handled.
 x and y use different units on non-square images. (This gets fixed in Stage 1, where the frame size is known.)
 θ is discarded, so direction-based gestures (swipes) will need it kept.
 Left and right hands stay mirror images; use handedness later.
+
+24/10/2026
+aim:get started with the next step.create the main integretor
+report:going well , easy it is for me .nice going .
+note::
+no music helps sometime
