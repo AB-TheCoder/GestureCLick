@@ -55,11 +55,12 @@ class Normalizer():
         except Exception as e:
             raise RuntimeError(f'The system could not intiate the model :{e}')
 
-
-    def translation_invariance(self,data_result:HandLandmarkerResult,anchor:int=WRIST)->list[np.ndarray]:#the defualt reference anchor is wrist pos
+    
+    def translation_invariance(self,data_result:HandLandmarkerResult,anchor:int=WRIST,aspect:float=1.0)->list[np.ndarray]:#the defualt reference anchor is wrist pos
         """This method normalizes the landmark coordinates ,making them relative to a anchor landmark"""
         try:
             
+
             if not 0<= anchor <= PINKY_TIP:
                 raise ValueError(f"anchor must be 0-20,got{anchor}")
             if data_result is None :
@@ -81,7 +82,7 @@ class Normalizer():
 
                 for landmark in hand:
 
-                    x = landmark.x - reference.x
+                    x = (landmark.x - reference.x)*aspect
                     y = landmark.y - reference.y # making the coordinate independent of the image
                     z = landmark.z - reference.z
 

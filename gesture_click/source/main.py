@@ -14,6 +14,9 @@
 
 
 
+
+
+
 try:
     import cv2 as cv
 except Exception as e:
@@ -25,14 +28,12 @@ except Exception as e:
 
 # Secondary 
 try:
-    import sys
-    from pathlib import Path
     import time 
     from typing import Optional
+    from collections import deque
 except Exception as e:
     raise ImportError(f" Could not import Secondary Packages{e}")
-SOURCE_DIR = Path(__file__).resolve().parent / "source"
-sys.path.insert(0, str(SOURCE_DIR))
+
 try:
     from camera_feed import Camera_Feed
     from Gesture_landmark import Handtriangulator,MODEL_PATH
@@ -81,44 +82,73 @@ class integretor():
 
         try:
             self.tracker = Handtriangulator(model_path=str(Model_path))
-            self.start=time.monotonic()
             self.camera = Camera_Feed()
             self.normalizer= Normalizer()
             self.frame_count=0
+            self.frame_times = deque(maxlen=10)
             
         except Exception as e:
             raise RuntimeError(f" could not Initialise the constructure due to:{e}")
+    @staticmethod
+    def real_hand(label:str)->str:
+        """to interchange handedness labels the frame is flipped, so MediaPipe's labels are swapped; tested on 25/10: right hand → 'Left'."""
+        try:
+            if label =="Right":
+                return "Left"
+            elif label == "Left":
+                return "Right"
+            else :
+                raise ValueError("inappropriate label output for hand")
+        except Exception as e:
+            raise RuntimeError(f" could not switch labels :{e}:: got {label}")
+            
     def FEED(self):
+        self.start=time.perf_counter()
+        self.previous = time.perf_counter()
+
+
         try:
             
 
             while True:
+                
+                frame = self.camera.Get_frame()
+                frame = cv.flip(frame, 1)
+                #drawing the landmarks
+                timestamp_ms=int((time.perf_counter()-self.start)*1000)
+                result = self.tracker.analyise_landmarks(frame,timestamp_ms)
+                frame = self.tracker.visuals(frame,result)
+                # normalise
+
+                self.frame_count += 1
                 try:
-                    frame = self.camera.Get_frame()
-                    #drawing the landmarks
-                    timestamp_ms=int((time.monotonic()-self.start)*1000)
-                    result = self.tracker.analyise_landmarks(frame,timestamp_ms)
-                    frame = self.tracker.visuals(frame,result)
-                    # normalise
+                    height,width=frame.shape[0:2]
+                    translated = self.normalizer.translation_invariance(result,aspect=width/height)
+                    scaled = self.normalizer.scale_invariance(translated)
+                    rotated = self.normalizer.rotational_invariance(scaled)
+                except RuntimeError as e:
+                    print("skipped frame:", e)
+                    rotated = []
 
-                    self.frame_count += 1
-                    try:
-                        translated = self.normalizer.translation_invariance(result)
-                        scaled = self.normalizer.scale_invariance(translated)
-                        rotated = self.normalizer.rotational_invariance(scaled)
-                    except RuntimeError as e:
-                        print("skipped frame:", e)
-                        rotated = []
+                if self.frame_count % 15==0:
+                    for i, hand in enumerate(rotated):
 
-                    if self.frame_count % 15==0:
-                        for hand in rotated:
-                            print(np.round(hand[MIDDLE_MCP],3))
+                        print(integretor.real_hand(result.handedness[i][0].category_name), np.round(hand[MIDDLE_MCP], 3))
 
-                    cv.imshow("GestureClick",frame)
-                    if cv.waitKey(1) & 0xFF == ord('q'):
-                        break
-                except Exception as e:
-                    raise RuntimeError(e)
+                
+                # GETTING FPS ON SCREEN 
+                now = time.perf_counter()
+                self.frame_times.append(now-self.previous)
+                self.previous = now
+                fps = len(self.frame_times)/ sum(self.frame_times)
+
+
+                cv.putText(frame, f"FPS: {fps:.0f}", (10, 30),
+                cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 225), 2)
+                cv.imshow("GestureClick",frame)
+
+                if cv.waitKey(1) & 0xFF == ord('q'):
+                    break
 
         except Exception as e:
             raise RuntimeError(f"A error with the main loop ruined the fun;|.FIX IT: {e}")

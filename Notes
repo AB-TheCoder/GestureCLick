@@ -112,3 +112,35 @@ aim:get started with the next step.create the main integretor
 report:going well , easy it is for me .nice going .
 note::
 no music helps sometime
+
+25/10/2026
+Aim: finish Stage 1 - live webcam pipeline (camera -> mediapipe -> normalizer)
+Report: finished. landmarks drawn live, normalizer runs every frame, FPS shown on screen.
+
+Notes:
+- main.py lives in gesture_click/source/ (same folder as the other modules, so no sys.path needed).
+- loop order: grab frame -> flip -> landmarks -> draw -> normalize -> FPS -> imshow -> waitKey.
+  imshow must come LAST or the drawings never show.
+- timestamps: MediaPipe VIDEO mode needs a bigger timestamp every frame (ms, int).
+  use time.perf_counter(), NOT time.monotonic(): on my Windows/Python 3.11 monotonic
+  only ticks every 15.6 ms (checked with time.get_clock_info).
+- MIRROR DECISION: frame is flipped with cv.flip(frame, 1) right after Get_frame,
+  so the screen acts like a mirror and the numbers match the screen.
+  side effect: MediaPipe labels the hands SWAPPED (raising my right hand gives "Left").
+  real_hand() swaps them back. tested 25/10/2026. do NOT delete real_hand().
+  if MediaPipe is updated, re-test this.
+- aspect-ratio fix: x is multiplied by width/height in translation_invariance,
+  so x and y use the same unit. frame.shape is (height, width, 3): height first!
+- one bad frame must not kill the loop: normalizer errors (RuntimeError) are caught
+  and the frame is skipped.
+- FPS: average of the last 10 frame times (deque maxlen=10). my FPS: 30 (no hand) /
+  30 (one hand) / 30 (two hands).
+- editor auto-imports junk (pyexpat, contextlib, turtle). check imports after typing.
+
+Limitations still open:
+- rotation is in-plane only (palm facing away / sideways not handled).
+- theta is thrown away -> direction gestures (swipes) will need it later.
+- left and right hands are mirror images of each other -> use handedness later.
+- test_normalizer.py not written yet.
+
+Next: Stage 2 - features (finger bent/straight, fingertip distances).
