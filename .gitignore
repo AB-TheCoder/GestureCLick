@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+lessons
+crash_course.MD 
+opencv_basics.MD
+earlier_reference.py
