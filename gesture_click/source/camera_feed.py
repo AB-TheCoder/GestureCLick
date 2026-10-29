@@ -20,7 +20,7 @@ from typing import Optional
 
 from os import path
 from datetime import datetime as dt
-from typing_extensions import runtime
+
 
 #paths are built from this file's location so they work from any working directory
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
