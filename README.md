@@ -35,7 +35,28 @@
 
 ### this is not final but will be built upon with experince.
 
+## How to install and run
 
+**You need:** Python 3.11, a webcam, and Git.
+
+1. Clone the repo:
+   git clone https://github.com/AB-TheCoder/GestureCLick.git
+   cd GestureCLick
+
+2. Make a virtual environment and turn it on:
+   python -m venv .venv
+   .venv\Scripts\activate        (Windows)
+   source .venv/bin/activate     (Mac/Linux)
+
+3. Install the libraries (OpenCV, MediaPipe, NumPy):
+   pip install -r requirements.txt
+
+4. Run it:
+   python gesture_click/source/main.py
+
+A window opens showing your webcam with the hand landmarks drawn on and the FPS in the corner. Hold up one or both hands to see them tracked. Press **q** to quit.
+
+The MediaPipe hand model (`hand_landmarker.task`) is already in `gesture_click/data`, so you don't need to download anything else.
 
 
 ## Details for first update:
