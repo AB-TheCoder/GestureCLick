@@ -14,12 +14,10 @@ try:
 except ImportError as IR:
     print(IR)
 # secondary
-from ast import Try
 from nt import error
 from pathlib import Path
-from pdb import run
 from typing import Optional
-from cv2.gapi import parseSSD
+
 from os import path
 from datetime import datetime as dt
 
