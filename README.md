@@ -38,3 +38,14 @@
 3. gesture-identification - then i will form the basis of identifications and the basic defaults
 4. customise-config- i will then add the novel function of customisable gesture and actions relating with different commands
 5. Ui- build a ui for the interface
+
+
+## Details for first update:
+1. i have created almost half of the project.
+2. the program is now able to recognise hands ,give landmarks , normalise them .
+3. next step is to figure out a way to extract feature from the numbers and assign gestures to specific features.
+
+## Disclosure
+1. AI has played an important yet passive and a teaching role in my project. I have mainly used claude code for most of my work.
+2. Ai guides me on different steps ,debugs code and tells me places where i can make it more efficient and a better version of itself.
+3. i have tried to ensure that the final say remains on my hand and it is i who writes the code and whos thinking has been implemented.
