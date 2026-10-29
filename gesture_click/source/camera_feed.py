@@ -14,12 +14,13 @@ try:
 except ImportError as IR:
     print(IR)
 # secondary
-from nt import error
+
 from pathlib import Path
 from typing import Optional
 
 from os import path
 from datetime import datetime as dt
+from typing_extensions import runtime
 
 #paths are built from this file's location so they work from any working directory
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -31,7 +32,7 @@ class Camera_Feed():
         try:
             self.cap = cv.VideoCapture(camera_index)    
             if not self.cap.isOpened():
-                raise error('the Camera could no be opened')
+                raise RuntimeError('the Camera could no be opened')
         except Exception as e:
             raise RuntimeError(f'the initialization failed because:{e}')
     def Get_frame(self) -> np.ndarray:
@@ -39,7 +40,7 @@ class Camera_Feed():
         try:
             success,frame = self.cap.read()
             if not success:
-                raise error('Cv was unable to fetch the frame')
+                raise RuntimeError('Cv was unable to fetch the frame')
             else:
                 self.frame = frame
                 return frame
@@ -63,7 +64,7 @@ class Camera_Feed():
                 timestamp= dt.now().strftime(r"%Y-%m-%d_%H-%M-%S")
                 pathto =  Path(save_dir) / f"{timestamp}-frame.png"
                 if not cv.imwrite(str(pathto),frame):
-                    raise error('the library could not write the frame to the desired location')
+                    raise RuntimeError('the library could not write the frame to the desired location')
                
                 
         except Exception as e:

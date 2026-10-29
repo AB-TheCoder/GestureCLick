@@ -65,7 +65,7 @@ The MediaPipe hand model (`hand_landmarker.task`) is already in `gesture_click/d
 3. next step is to figure out a way to extract feature from the numbers and assign gestures to specific features.
 
 ## Disclosure
-1. AI has played an important yet passive and a teaching role in my project. I have mainly used claude code for most of my work.
+1. AI has played an important yet passive and a teaching role in my project. Claude Code has been my choice.
 2. Ai guides me on different steps ,debugs code and tells me places where i can make it more efficient and a better version of itself.
 3. i have tried to ensure that the final say remains on my hand and it is i who writes the code and whos thinking has been implemented.
 4. I Have provided many of The ai generated lessons and documents in the lessons folder.
