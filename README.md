@@ -58,6 +58,19 @@ A window opens showing your webcam with the hand landmarks drawn on and the FPS 
 
 The MediaPipe hand model (`hand_landmarker.task`) is already in `gesture_click/data`, so you don't need to download anything else.
 
+## Download (no Python needed)
+
+1. Go to the [Releases page](https://github.com/AB-TheCoder/GestureCLick/releases/latest).
+2. Download `GestureClick.exe` (Windows).
+3. Double-click it. You need a webcam.
+   * Windows SmartScreen may warn because the app is unsigned: click **More info**, then **Run anyway**.
+   * The first launch can take 10-20 seconds while it unpacks.
+4. A window shows your webcam with hand landmarks and FPS. Hold up one or both hands to see them tracked. Press **q** to quit.
+
+**Current state:** this build does hand tracking and landmark normalisation. Custom-gesture recognition and photo/video capture are not built yet.
+
+## A go-throught video:
+* I have also made a go-through video showcasing the project , it is available here- [GO-through](https://youtu.be/4gBTbxrcfnI)
 
 ## Details for first update:
 1. i have created almost half of the project.

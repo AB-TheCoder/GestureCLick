@@ -30,7 +30,7 @@ except Exception as e:
 #secondary--------------------------
 try:
 
-
+    import sys
     from pathlib import Path
     from typing import Optional
  
@@ -38,7 +38,12 @@ except Exception as e:
     raise RuntimeError(f'the following error occurred while importing the secondary modules:{e}')
 
 #paths are built from this file's location so they work from any working directory
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+def _data_dir() -> Path:
+    if getattr(sys, "frozen", False):
+        return Path(sys._MEIPASS) / "data"
+    return Path(__file__).resolve().parent.parent / "data"
+
+DATA_DIR = _data_dir()
 MODEL_PATH = DATA_DIR / "hand_landmarker.task"
 
 
@@ -144,7 +149,7 @@ class Handtriangulator():
         """ this method will terminate the program""" 
         try:
             self.model.close()  
-            print('model Terminated')
+            # print('model Terminated')
             return None
         except Exception as e:
             raise RuntimeError(f'the system could not terminate API :{e}')

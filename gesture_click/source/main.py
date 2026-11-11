@@ -8,15 +8,6 @@
 
 # primary:
 
-
-
-
-
-
-
-
-
-
 try:
     import cv2 as cv
 except Exception as e:
@@ -75,7 +66,7 @@ PINKY_TIP = 20
 
 #-------------------------------------------------------------------------------
 #THE LOOOOOPPPPPP:
-
+print("loading model...please wait")
 class integretor():
     def __init__(self,Model_path:Optional[str]=MODEL_PATH )-> None:
         """ To initalise things and introduce basic variables(typicaly to do what a constructor does)"""
@@ -86,6 +77,7 @@ class integretor():
             self.normalizer= Normalizer()
             self.frame_count=0
             self.frame_times = deque(maxlen=10)
+            
             
         except Exception as e:
             raise RuntimeError(f" could not Initialise the constructure due to:{e}")
